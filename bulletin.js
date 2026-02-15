@@ -80,21 +80,36 @@ function updateClock() {
 function startSystem() {
     console.log("EQT System Initializing...");
     
-    // 初始化公告
+    // 1. 先加载文字内容，但不启动动画
     initBulletin();
 
-    // 强力重试寻找时钟元素（解决电脑端加载过快问题）
-    const checkClockExist = setInterval(() => {
+    // 2. 启动时钟（电脑端关心的功能）
+    const clockTimer = setInterval(() => {
         const el = document.getElementById('real-time-clock');
         if (el) {
             updateClock();
-            setInterval(updateClock, 1000);
-            clearInterval(checkClockExist);
-            console.log("Clock Activated.");
+            setInterval(updateClock, 1000); // 开启秒更
+            clearInterval(clockTimer);
+            console.log("Clock Ready.");
         }
     }, 100);
-}
 
+    // 3. 【核心修复】给 iPad 留出“冷静期”
+    // 在时钟稳定运行 2 秒后，再向显卡申请公告动画
+    setTimeout(() => {
+        const scrollEl = document.getElementById('js-bulletin-container');
+        if (scrollEl) {
+            // 强制触发一次重绘，清理之前的状态
+            scrollEl.style.display = 'none';
+            void scrollEl.offsetHeight; 
+            scrollEl.style.display = 'inline-block';
+            
+            // 注入类名，激活动画
+            scrollEl.classList.add('start-scrolling');
+            console.log("iPad Animation Awakened.");
+        }
+    }, 2000); // 2秒延迟，彻底避开时钟初始化的重排高峰
+}
 // 5. 挂载启动
 if (document.readyState === 'complete') {
     startSystem();
