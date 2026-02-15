@@ -80,10 +80,10 @@ function updateClock() {
 function startSystem() {
     console.log("EQT System Initializing...");
     
-    // 1. 初始化公告文字
+    // 1. 初始化公告（先塞文字）
     initBulletin();
 
-    // 2. 启动时钟（已确认正常，保持不变）
+    // 2. 启动时钟（电脑端已正常，保持不变）
     const clockTimer = setInterval(() => {
         const el = document.getElementById('real-time-clock');
         if (el) {
@@ -93,25 +93,18 @@ function startSystem() {
         }
     }, 100);
 
-    // 3. 【全平台通用启动补丁】
-    // 延迟 1 秒启动，确保公告内容已经完全填充到 DOM 中
+    // 3. 【全平台唤醒逻辑】
+    // 延迟 800ms，等内容渲染完毕后，通过改变透明度来“震醒”iPad 的动画引擎
     setTimeout(() => {
         const scrollEl = document.getElementById('js-bulletin-container');
         if (scrollEl) {
-            // 强力触发重绘
-            scrollEl.style.display = 'none';
+            // 拍一巴掌强制重绘
             void scrollEl.offsetHeight; 
-            scrollEl.style.display = 'inline-block';
-            
-            // 直接通过 Style 注入动画，不依赖外部 Class
-            // 这种写法在 iPad Safari 上具有最高的执行权重
-            const animationStyles = "marquee 50s linear infinite";
-            scrollEl.style.animation = animationStyles;
-            scrollEl.style.webkitAnimation = animationStyles; // 针对旧版 Safari
-            
-            console.log("Animation Force Started on all devices.");
+            // 显示内容，此时动画会自动从当前进度的位置跑起来
+            scrollEl.classList.add('content-ready');
+            console.log("Bulletin visible and scrolling.");
         }
-    }, 1000); 
+    }, 800);
 }
 
 // 5. 挂载启动
