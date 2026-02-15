@@ -78,42 +78,44 @@ function updateClock() {
 
 // 4. 强力启动机制
 function startSystem() {
-    initBulletin();
-    
-    // 1. 时钟正常启动，不要管它
+    initBulletin(); // 填入内容
+
+    // 1. 正常启动时钟
     updateClock();
     setInterval(updateClock, 1000);
 
     const scrollEl = document.getElementById('js-bulletin-container');
     if (scrollEl) {
-        // --- 核心定位修复：模拟锁屏重启的渲染逻辑 ---
+        // 先移除所有可能冲突的动画类或属性
+        scrollEl.style.animation = 'none';
+        scrollEl.style.webkitAnimation = 'none';
         
-        // 第一步：初始时彻底从显卡树中剥离，不让它参与“首帧快照”
-        scrollEl.style.display = 'none';
-        scrollEl.style.webkitTransform = 'translate3d(0,0,0)';
+        // --- 核心补丁：强制模拟“切回 App”时的渲染重置 ---
         
-        // 第二步：使用双重帧同步。这会确保第一帧（时钟加载）完全结束后，再处理第二帧
-        requestAnimationFrame(() => {
-            // 此时主线程已经处理完了首屏布局
+        // 关键延迟：等 1 秒，让时钟的第一波重绘高潮过去
+        setTimeout(() => {
+            // 物理唤醒：改变一个会导致“合成层重组”的属性
+            // 使用 translateZ(0) 强制提升为独立层
+            scrollEl.style.webkitTransform = 'translateZ(0)';
+            scrollEl.style.transform = 'translateZ(0)';
+            
+            // 强制浏览器执行一次“重绘”
+            // 改变 opacity 从 0.99 到 1 会触发 Safari 的全层重扫描
+            scrollEl.style.opacity = '0.99';
+            
             requestAnimationFrame(() => {
-                // 恢复显示，并强行改变一个无关痛痒的属性（比如字间距），迫使 GPU 重新扫描
-                scrollEl.style.display = 'inline-block';
-                scrollEl.style.letterSpacing = '0.1px'; 
+                // 在下一帧，正式加入动画
+                const anim = 'marquee 50s linear infinite';
+                scrollEl.style.webkitAnimation = anim;
+                scrollEl.style.animation = anim;
                 
-                // 第三步：手动注入动画，此时的 GPU 环境是“解锁后”级别的纯净环境
-                setTimeout(() => {
-                    const animationName = 'marquee 50s linear infinite';
-                    scrollEl.style.webkitAnimation = animationName;
-                    scrollEl.style.animation = animationName;
-                    
-                    // 彻底修复：1秒后把字间距还原，再次抖动渲染引擎
-                    setTimeout(() => { scrollEl.style.letterSpacing = 'normal'; }, 1000);
-                }, 100); 
+                // 扫尾：微调回来，确保它是 100% 不透明
+                setTimeout(() => { scrollEl.style.opacity = '1'; }, 100);
+                console.log("Simulated App-Switch repaint completed.");
             });
-        });
+        }, 1000);
     }
 }
-
 // 5. 挂载启动
 if (document.readyState === 'complete') {
     startSystem();
