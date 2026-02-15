@@ -79,43 +79,43 @@ function updateClock() {
 // 4. 强力启动机制
 function startSystem() {
     initBulletin(); // 填入内容
-
-    // 1. 正常启动时钟
     updateClock();
     setInterval(updateClock, 1000);
 
+    const bar = document.getElementById('live-bulletin-bar');
     const scrollEl = document.getElementById('js-bulletin-container');
-    if (scrollEl) {
-        // 先移除所有可能冲突的动画类或属性
-        scrollEl.style.animation = 'none';
-        scrollEl.style.webkitAnimation = 'none';
-        
-        // --- 核心补丁：强制模拟“切回 App”时的渲染重置 ---
-        
-        // 关键延迟：等 1 秒，让时钟的第一波重绘高潮过去
+
+    if (bar && scrollEl) {
+        // 1. 初始时，先给它一个“非正常”的布局状态
+        bar.style.height = '44px'; 
+        scrollEl.style.opacity = '0';
+
+        // 2. 关键补丁：模拟“切 App / 缩放浏览器”的重绘冲动
+        // 我们等 1.5 秒，避开初始加载的混乱期
         setTimeout(() => {
-            // 物理唤醒：改变一个会导致“合成层重组”的属性
-            // 使用 translateZ(0) 强制提升为独立层
-            scrollEl.style.webkitTransform = 'translateZ(0)';
-            scrollEl.style.transform = 'translateZ(0)';
+            // A. 强制改变尺寸（哪怕只有 1px），这会触发 Safari 的 Layout 重算
+            bar.style.height = '45px'; 
             
-            // 强制浏览器执行一次“重绘”
-            // 改变 opacity 从 0.99 到 1 会触发 Safari 的全层重扫描
-            scrollEl.style.opacity = '0.99';
+            // B. 触发一次强行重绘（Reflow）
+            void bar.offsetHeight; 
+            
+            // C. 此时赋予 3D 硬件加速，并让它可见
+            scrollEl.style.webkitTransform = 'translate3d(0, 0, 0)';
+            scrollEl.style.transform = 'translate3d(0, 0, 0)';
+            scrollEl.style.opacity = '1';
             
             requestAnimationFrame(() => {
-                // 在下一帧，正式加入动画
-                const anim = 'marquee 50s linear infinite';
-                scrollEl.style.webkitAnimation = anim;
-                scrollEl.style.animation = anim;
+                // D. 启动动画
+                // 此时 Safari 的状态和“缩放浏览器后”一模一样：清爽且正确
+                scrollEl.style.webkitAnimation = 'marquee 50s linear infinite';
+                scrollEl.style.animation = 'marquee 50s linear infinite';
                 
-                // 扫尾：微调回来，确保它是 100% 不透明
-                setTimeout(() => { scrollEl.style.opacity = '1'; }, 100);
-                console.log("Simulated App-Switch repaint completed.");
+                console.log("Forced dynamic re-layout: Simulating browser resize/switch.");
             });
-        }, 1000);
+        }, 1500);
     }
 }
+
 // 5. 挂载启动
 if (document.readyState === 'complete') {
     startSystem();
