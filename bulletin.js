@@ -78,39 +78,35 @@ function updateClock() {
 
 // 4. 强力启动机制
 function startSystem() {
-    initBulletin(); // 填入内容
-    updateClock();
-    setInterval(updateClock, 1000);
+    console.log("EQT System Initializing...");
+    
+    // 1. 正常初始化公告文字，但 CSS 里先把 animation 设为 none
+    initBulletin();
 
-    const scrollEl = document.getElementById('js-bulletin-container');
-    if (!scrollEl) return;
+    // 2. 启动时钟，并让时钟带任务
+    let frameCount = 0;
+    const clockTimer = setInterval(() => {
+        const el = document.getElementById('real-time-clock');
+        if (el) {
+            updateClock();
+            frameCount++;
 
-    // 1. 彻底停掉 CSS 动画，咱们自己来
-    scrollEl.style.animation = 'none';
-    scrollEl.style.webkitAnimation = 'none';
-    scrollEl.style.willChange = 'transform';
-
-    let currentX = window.innerWidth; // 从屏幕右侧开始
-    const speed = 2; // 滚动速度
-
-    function step() {
-        currentX -= speed;
-        
-        // 当文字完全滚出左侧（假设文字宽度是 scrollWidth）
-        if (currentX < -scrollEl.scrollWidth) {
-            currentX = window.innerWidth;
+            // --- 核心改动：利用时钟的“合法跳动”来偷渡公告的启动 ---
+            // 在时钟跳动第 3 次（即 3 秒后，此时 iPad 已经完全稳定）
+            if (frameCount === 3) {
+                const scrollEl = document.getElementById('js-bulletin-container');
+                if (scrollEl) {
+                    // 绝招：不使用 class，直接修改 style，
+                    // 并且加入一个微小的 z-index 变化，强制 Safari 重新进行分层计算
+                    scrollEl.style.zIndex = "100";
+                    scrollEl.style.webkitAnimation = 'marquee 60s linear infinite';
+                    scrollEl.style.animation = 'marquee 60s linear infinite';
+                    
+                    console.log("Bulletin hijacked by clock pulse.");
+                }
+            }
         }
-
-        // 2. 用硬件加速的 translate3d 强行推着它走
-        scrollEl.style.transform = `translate3d(${currentX}px, 0, 0)`;
-        scrollEl.style.webkitTransform = `translate3d(${currentX}px, 0, 0)`;
-
-        // 3. 关键：跟着浏览器的刷新频率走
-        requestAnimationFrame(step);
-    }
-
-    // 给一点点缓冲，确保首屏加载完了再跑
-    setTimeout(step, 1000);
+    }, 1000);
 }
 
 // 5. 挂载启动
