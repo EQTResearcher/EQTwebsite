@@ -61,6 +61,24 @@ function initBulletin() {
     }).join('');
 }
 
+function updateClock() {
+    const now = new Date();
+    
+    // 自动补零函数
+    const pad = (num) => String(num).padStart(2, '0');
+    
+    const timeString = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())} (UTC/GMT+8)`;
+    
+    const clockElement = document.getElementById('real-time-clock');
+    if (clockElement) {
+        clockElement.innerHTML = `<i class="far fa-clock"></i> ${timeString}`;
+    }
+}
+
+// 启动定时器
+setInterval(updateClock, 1000);
+updateClock();
+
 // 确保 DOM 加载完成后运行
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initBulletin);
