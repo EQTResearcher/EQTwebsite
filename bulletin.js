@@ -78,36 +78,42 @@ function updateClock() {
 
 // 4. 强力启动机制
 function startSystem() {
-    console.log("EQT System Initializing...");
-    
-    // 1. 正常初始化公告文字，但 CSS 里先把 animation 设为 none
     initBulletin();
+    
+    // 1. 时钟正常启动，不要管它
+    updateClock();
+    setInterval(updateClock, 1000);
 
-    // 2. 启动时钟，并让时钟带任务
-    let frameCount = 0;
-    const clockTimer = setInterval(() => {
-        const el = document.getElementById('real-time-clock');
-        if (el) {
-            updateClock();
-            frameCount++;
-
-            // --- 核心改动：利用时钟的“合法跳动”来偷渡公告的启动 ---
-            // 在时钟跳动第 3 次（即 3 秒后，此时 iPad 已经完全稳定）
-            if (frameCount === 3) {
-                const scrollEl = document.getElementById('js-bulletin-container');
-                if (scrollEl) {
-                    // 绝招：不使用 class，直接修改 style，
-                    // 并且加入一个微小的 z-index 变化，强制 Safari 重新进行分层计算
-                    scrollEl.style.zIndex = "100";
-                    scrollEl.style.webkitAnimation = 'marquee 60s linear infinite';
-                    scrollEl.style.animation = 'marquee 60s linear infinite';
+    const scrollEl = document.getElementById('js-bulletin-container');
+    if (scrollEl) {
+        // --- 核心定位修复：模拟锁屏重启的渲染逻辑 ---
+        
+        // 第一步：初始时彻底从显卡树中剥离，不让它参与“首帧快照”
+        scrollEl.style.display = 'none';
+        scrollEl.style.webkitTransform = 'translate3d(0,0,0)';
+        
+        // 第二步：使用双重帧同步。这会确保第一帧（时钟加载）完全结束后，再处理第二帧
+        requestAnimationFrame(() => {
+            // 此时主线程已经处理完了首屏布局
+            requestAnimationFrame(() => {
+                // 恢复显示，并强行改变一个无关痛痒的属性（比如字间距），迫使 GPU 重新扫描
+                scrollEl.style.display = 'inline-block';
+                scrollEl.style.letterSpacing = '0.1px'; 
+                
+                // 第三步：手动注入动画，此时的 GPU 环境是“解锁后”级别的纯净环境
+                setTimeout(() => {
+                    const animationName = 'marquee 50s linear infinite';
+                    scrollEl.style.webkitAnimation = animationName;
+                    scrollEl.style.animation = animationName;
                     
-                    console.log("Bulletin hijacked by clock pulse.");
-                }
-            }
-        }
-    }, 1000);
+                    // 彻底修复：1秒后把字间距还原，再次抖动渲染引擎
+                    setTimeout(() => { scrollEl.style.letterSpacing = 'normal'; }, 1000);
+                }, 100); 
+            });
+        });
+    }
 }
+
 // 5. 挂载启动
 if (document.readyState === 'complete') {
     startSystem();
