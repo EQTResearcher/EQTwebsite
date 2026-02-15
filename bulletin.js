@@ -78,45 +78,39 @@ function updateClock() {
 
 // 4. 强力启动机制
 function startSystem() {
-    initBulletin(); // 填充文字
+    initBulletin(); // 填入内容
     updateClock();
     setInterval(updateClock, 1000);
 
     const scrollEl = document.getElementById('js-bulletin-container');
-    
-    if (scrollEl) {
-        // 第一步：先让它正常启动（即使它会消失）
-        scrollEl.style.animation = 'marquee 50s linear infinite';
-        scrollEl.style.webkitAnimation = 'marquee 50s linear infinite';
+    if (!scrollEl) return;
 
-        // 第二步：【核心核武器】在 2 秒后（此时已经消失了）
-        // 我们手动触发一个系统级的 resize 事件
-        setTimeout(() => {
-            console.log("System-level Re-layout Triggered...");
-            
-            // 1. 瞬间改变 body 的高度，产生物理位移
-            document.body.style.overflow = 'hidden';
-            document.body.style.height = '100.1%'; 
-            
-            // 2. 派发一个真实的 resize 事件，欺骗 Safari 内核
-            window.dispatchEvent(new Event('resize'));
-            
-            // 3. 0.1秒后恢复原状
-            setTimeout(() => {
-                document.body.style.height = '100%';
-                document.body.style.overflow = '';
-                // 再次派发 resize
-                window.dispatchEvent(new Event('resize'));
-                
-                // 4. 终极一击：给滚动元素换一个全新的 ID
-                // 这会强制 Safari 彻底删掉旧的显存层，建立新的
-                scrollEl.id = 'js-bulletin-container-NEW';
-                
-                console.log("Repaint cycle forced by logic switch.");
-            }, 100);
-            
-        }, 2500); // 在它消失后的那个瞬间执行
+    // 1. 彻底停掉 CSS 动画，咱们自己来
+    scrollEl.style.animation = 'none';
+    scrollEl.style.webkitAnimation = 'none';
+    scrollEl.style.willChange = 'transform';
+
+    let currentX = window.innerWidth; // 从屏幕右侧开始
+    const speed = 2; // 滚动速度
+
+    function step() {
+        currentX -= speed;
+        
+        // 当文字完全滚出左侧（假设文字宽度是 scrollWidth）
+        if (currentX < -scrollEl.scrollWidth) {
+            currentX = window.innerWidth;
+        }
+
+        // 2. 用硬件加速的 translate3d 强行推着它走
+        scrollEl.style.transform = `translate3d(${currentX}px, 0, 0)`;
+        scrollEl.style.webkitTransform = `translate3d(${currentX}px, 0, 0)`;
+
+        // 3. 关键：跟着浏览器的刷新频率走
+        requestAnimationFrame(step);
     }
+
+    // 给一点点缓冲，确保首屏加载完了再跑
+    setTimeout(step, 1000);
 }
 
 // 5. 挂载启动
