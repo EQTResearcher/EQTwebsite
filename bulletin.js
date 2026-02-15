@@ -78,39 +78,36 @@ function updateClock() {
 
 // 4. 强力启动机制
 function startSystem() {
-    console.log("EQT System Go.");
+    console.log("EQT System Initializing...");
     
-    // 1. 初始化公告内容
+    // 1. 正常初始化公告文字，但 CSS 里先把 animation 设为 none
     initBulletin();
 
-    // 2. 启动时钟 (既然已正常，不改动逻辑)
+    // 2. 启动时钟，并让时钟带任务
+    let frameCount = 0;
     const clockTimer = setInterval(() => {
         const el = document.getElementById('real-time-clock');
         if (el) {
             updateClock();
-            setInterval(updateClock, 1000);
-            clearInterval(clockTimer);
-        }
-    }, 100);
+            frameCount++;
 
-    // 3. 【强效补丁】解决“不滚动”和“不显示”
-    setTimeout(() => {
-        const container = document.getElementById('live-bulletin-bar');
-        const scrollEl = document.getElementById('js-bulletin-container');
-        
-        if (scrollEl) {
-            // 绝招：重写 innerHTML 强制浏览器销毁并重建这个 DOM 节点
-            // 这在 iPad 上会强制重新触发 CSS 动画，解决“静止”问题
-            const currentHTML = scrollEl.innerHTML;
-            scrollEl.innerHTML = '';
-            void scrollEl.offsetHeight; // 强制重绘
-            scrollEl.innerHTML = currentHTML;
-            
-            console.log("Bulletin force-reloaded.");
+            // --- 核心改动：利用时钟的“合法跳动”来偷渡公告的启动 ---
+            // 在时钟跳动第 3 次（即 3 秒后，此时 iPad 已经完全稳定）
+            if (frameCount === 3) {
+                const scrollEl = document.getElementById('js-bulletin-container');
+                if (scrollEl) {
+                    // 绝招：不使用 class，直接修改 style，
+                    // 并且加入一个微小的 z-index 变化，强制 Safari 重新进行分层计算
+                    scrollEl.style.zIndex = "100";
+                    scrollEl.style.webkitAnimation = 'marquee 60s linear infinite';
+                    scrollEl.style.animation = 'marquee 60s linear infinite';
+                    
+                    console.log("Bulletin hijacked by clock pulse.");
+                }
+            }
         }
-    }, 500); 
+    }, 1000);
 }
-
 // 5. 挂载启动
 if (document.readyState === 'complete') {
     startSystem();
