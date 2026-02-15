@@ -140,35 +140,21 @@
         </div>
     
         <style>
-            /* 1. 核心动画：增加 2D 兼容性 */
+            /* 彻底清除之前的 padding 或 opacity 逻辑 */
             @keyframes marquee {
-                0% { transform: translateX(100vw); -webkit-transform: translateX(100vw); }
-                100% { transform: translateX(-100%); -webkit-transform: translateX(-100%); }
+                0% { transform: translateX(100vw); }
+                100% { transform: translateX(-100%); }
             }
             
             .scrolling-text {
-                display: inline-block;
+                display: inline-block !important; /* 强制显示 */
                 white-space: nowrap;
                 line-height: 45px;
                 vertical-align: middle;
-                
-                /* 默认开启滚动：不依赖 JS 启动，降低出错率 */
-                animation: marquee 50s linear infinite;
-                -webkit-animation: marquee 50s linear infinite;
-                
-                /* 硬件加速：唤醒 iPad 引擎 */
+                /* 直接开启硬件加速动画 */
+                animation: marquee 50s linear infinite !important;
+                -webkit-animation: marquee 50s linear infinite !important;
                 will-change: transform;
-                transform: translateZ(0);
-                -webkit-transform: translateZ(0);
-        
-                /* 初始透明：给 iPad 缓冲时间 */
-                opacity: 0;
-                transition: opacity 0.5s ease-in;
-            }
-        
-            /* 当内容准备好后显示的类 */
-            .content-ready {
-                opacity: 1 !important;
             }
         
             #live-bulletin-bar:hover .scrolling-text { 
