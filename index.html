@@ -140,27 +140,39 @@
         </div>
     
         <style>
-            /* 1. 基础容器样式 */
+            /* 1. 核心动画：增加 2D 兼容性 */
+            @keyframes marquee {
+                0% { transform: translateX(100vw); -webkit-transform: translateX(100vw); }
+                100% { transform: translateX(-100%); -webkit-transform: translateX(-100%); }
+            }
+            
             .scrolling-text {
                 display: inline-block;
                 white-space: nowrap;
                 line-height: 45px;
                 vertical-align: middle;
+                
+                /* 默认开启滚动：不依赖 JS 启动，降低出错率 */
+                animation: marquee 50s linear infinite;
+                -webkit-animation: marquee 50s linear infinite;
+                
+                /* 硬件加速：唤醒 iPad 引擎 */
                 will-change: transform;
-                /* 初始位置放在屏幕外（右侧） */
-                transform: translate3d(100vw, 0, 0); 
+                transform: translateZ(0);
+                -webkit-transform: translateZ(0);
+        
+                /* 初始透明：给 iPad 缓冲时间 */
+                opacity: 0;
+                transition: opacity 0.5s ease-in;
             }
         
-            /* 2. 核心动画定义（务必保留） */
-            @keyframes marquee {
-                0% { transform: translate3d(100vw, 0, 0); }
-                100% { transform: translate3d(-100%, 0, 0); }
+            /* 当内容准备好后显示的类 */
+            .content-ready {
+                opacity: 1 !important;
             }
         
-            /* 3. 悬停暂停逻辑 */
             #live-bulletin-bar:hover .scrolling-text { 
                 animation-play-state: paused !important; 
-                -webkit-animation-play-state: paused !important;
             }
         </style>
         
