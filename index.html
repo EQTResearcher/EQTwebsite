@@ -142,8 +142,8 @@
         <style>
             /* 彻底清除之前的 padding 或 opacity 逻辑 */
             @keyframes marquee {
-                0% { transform: translateX(100vw); }
-                100% { transform: translateX(-100%); }
+                0% { transform: translate3d(98vw, 0, 0); } /* 露个头，Safari 就不敢杀掉它 */
+                100% { transform: translate3d(-100%, 0, 0); }
             }
             
             .scrolling-text {
