@@ -75,24 +75,22 @@ function updateClock() {
     }
 }
 
-// 统一启动函数
+// 核心初始化函数
 function startAcademicPortal() {
-    // 1. 初始化布告栏内容
     initBulletin();
-    
-    // 2. 立即显示一次时间
+    // 立即执行一次时间更新
     updateClock();
-    
-    // 3. 开启时钟定时器
+    // 启动定时器
     setInterval(updateClock, 1000);
-    
-    console.log("Portal UI initialized successfully.");
 }
 
-// 确保在所有资源（包括样式和字体）加载完成后再运行
-// 这能解决电脑端因为计算宽度不准导致的“滚动不动”问题
-if (document.readyState === 'complete') {
+// 解决电脑端不显示和平板延迟的核心：
+// 使用 complete 判断，如果页面已加载则直接跑，否则等加载完
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
     startAcademicPortal();
 } else {
+    // 监听 DOMContentLoaded 确保 HTML 结构已就绪
+    document.addEventListener('DOMContentLoaded', startAcademicPortal);
+    // 额外监听 window load 作为后备，确保所有样式都计算完毕
     window.addEventListener('load', startAcademicPortal);
 }
