@@ -140,35 +140,27 @@
         </div>
     
         <style>
-            /* 强制隔离层 */
-            #real-time-clock {
-                transform: translateZ(0); /* 强制时钟独立一层 */
-                position: relative;
-                z-index: 10;
-            }
-        
-            #live-bulletin-bar {
-                transform: translateZ(0); /* 强制公告栏独立一层 */
-                position: relative;
-                z-index: 5;
-            }
-        
-            /* 平板兼容性动画：改回最原始的写法，但减少 CPU 负担 */
-            @keyframes marquee {
-                0% { transform: translate3d(100vw, 0, 0); }
-                100% { transform: translate3d(-100%, 0, 0); }
-            }
-            
+            /* 1. 基础容器样式 */
             .scrolling-text {
                 display: inline-block;
                 white-space: nowrap;
                 line-height: 45px;
+                vertical-align: middle;
                 will-change: transform;
-                /* 先不在这里写 animation，交给 JS 延时启动 */
+                /* 初始位置放在屏幕外（右侧） */
+                transform: translate3d(100vw, 0, 0); 
             }
         
-            .start-scrolling {
-                animation: marquee 60s linear infinite !important;
+            /* 2. 核心动画定义（务必保留） */
+            @keyframes marquee {
+                0% { transform: translate3d(100vw, 0, 0); }
+                100% { transform: translate3d(-100%, 0, 0); }
+            }
+        
+            /* 3. 悬停暂停逻辑 */
+            #live-bulletin-bar:hover .scrolling-text { 
+                animation-play-state: paused !important; 
+                -webkit-animation-play-state: paused !important;
             }
         </style>
         
