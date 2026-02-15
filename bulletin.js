@@ -1,7 +1,9 @@
 /**
- * EQT Academic Portal - Bulletin Data Configuration
- * 以后更新公告，只需修改或增减下面的 bulletins 数组即可。
+ * EQT Academic Portal - Integrated System
+ * 包含：公告配置、初始化逻辑、以及强力时钟重试机制
  */
+
+// 1. 公告数据配置
 const bulletins = [
     {
         title: "", 
@@ -42,12 +44,12 @@ const bulletins = [
     }
 ];
 
+// 2. 初始化公告函数
 function initBulletin() {
     const container = document.getElementById('js-bulletin-container');
     if (!container) return;
 
     container.innerHTML = bulletins.map(item => {
-        // 根据是否是特殊条目（新年问候）决定颜色
         const color = item.isSpecial ? "#d73a49" : "#003366";
         const fontWeight = item.isSpecial ? "bold" : "500";
         const iconHtml = item.icon ? `<i class="${item.icon}"></i> ` : "";
@@ -61,36 +63,41 @@ function initBulletin() {
     }).join('');
 }
 
+// 3. 时间更新函数
 function updateClock() {
+    const clockElement = document.getElementById('real-time-clock');
+    if (!clockElement) return;
+
     const now = new Date();
-    
-    // 自动补零函数
     const pad = (num) => String(num).padStart(2, '0');
-    
     const timeString = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())} (UTC/GMT+8)`;
     
-    const clockElement = document.getElementById('real-time-clock');
-    if (clockElement) {
-        clockElement.innerHTML = `<i class="far fa-clock"></i> ${timeString}`;
-    }
+    clockElement.style.color = "#444"; 
+    clockElement.innerHTML = `<i class="far fa-clock"></i> ${timeString}`;
 }
 
-// 核心初始化函数
-function startAcademicPortal() {
+// 4. 强力启动机制
+function startSystem() {
+    console.log("EQT System Initializing...");
+    
+    // 初始化公告
     initBulletin();
-    // 立即执行一次时间更新
-    updateClock();
-    // 启动定时器
-    setInterval(updateClock, 1000);
+
+    // 强力重试寻找时钟元素（解决电脑端加载过快问题）
+    const checkClockExist = setInterval(() => {
+        const el = document.getElementById('real-time-clock');
+        if (el) {
+            updateClock();
+            setInterval(updateClock, 1000);
+            clearInterval(checkClockExist);
+            console.log("Clock Activated.");
+        }
+    }, 100);
 }
 
-// 解决电脑端不显示和平板延迟的核心：
-// 使用 complete 判断，如果页面已加载则直接跑，否则等加载完
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    startAcademicPortal();
+// 5. 挂载启动
+if (document.readyState === 'complete') {
+    startSystem();
 } else {
-    // 监听 DOMContentLoaded 确保 HTML 结构已就绪
-    document.addEventListener('DOMContentLoaded', startAcademicPortal);
-    // 额外监听 window load 作为后备，确保所有样式都计算完毕
-    window.addEventListener('load', startAcademicPortal);
+    window.addEventListener('load', startSystem);
 }
