@@ -93,27 +93,6 @@ function startSystem() {
             console.log("Clock Activated.");
         }
     }, 100);
-
-
-    // 解决平板不滚动的终极代码
-    setTimeout(() => {
-        const scrollEl = document.getElementById('js-bulletin-container');
-        if (scrollEl) {
-            // 1. 先彻底移除可能卡死的动画
-            scrollEl.style.animation = 'none';
-            
-            // 2. 强制浏览器触发一次重绘 (OffsetHeight 触发)
-            // 这一步在代码上看起来没意义，但在平板底层逻辑中相当于“拍了它一巴掌”
-            void scrollEl.offsetHeight; 
-            
-            // 3. 重新注入动画指令
-            // 使用 translate3d 强制开启显卡，60s 确保在平板上平稳
-            scrollEl.style.animation = 'marquee 60s linear infinite';
-            
-            console.log("Tablet rendering forced to restart.");
-        }
-    }, 1000); // 延迟 1 秒，确保所有 CSS 和字体都加载完毕
-
 }
 
 // 5. 挂载启动
