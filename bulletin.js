@@ -78,12 +78,12 @@ function updateClock() {
 
 // 4. 强力启动机制
 function startSystem() {
-    console.log("EQT System Initializing...");
+    console.log("EQT System Go.");
     
-    // 1. 初始化公告（先塞文字）
+    // 1. 初始化公告内容
     initBulletin();
 
-    // 2. 启动时钟（电脑端已正常，保持不变）
+    // 2. 启动时钟 (既然已正常，不改动逻辑)
     const clockTimer = setInterval(() => {
         const el = document.getElementById('real-time-clock');
         if (el) {
@@ -93,18 +93,22 @@ function startSystem() {
         }
     }, 100);
 
-    // 3. 【全平台唤醒逻辑】
-    // 延迟 800ms，等内容渲染完毕后，通过改变透明度来“震醒”iPad 的动画引擎
+    // 3. 【强效补丁】解决“不滚动”和“不显示”
     setTimeout(() => {
+        const container = document.getElementById('live-bulletin-bar');
         const scrollEl = document.getElementById('js-bulletin-container');
+        
         if (scrollEl) {
-            // 拍一巴掌强制重绘
-            void scrollEl.offsetHeight; 
-            // 显示内容，此时动画会自动从当前进度的位置跑起来
-            scrollEl.classList.add('content-ready');
-            console.log("Bulletin visible and scrolling.");
+            // 绝招：重写 innerHTML 强制浏览器销毁并重建这个 DOM 节点
+            // 这在 iPad 上会强制重新触发 CSS 动画，解决“静止”问题
+            const currentHTML = scrollEl.innerHTML;
+            scrollEl.innerHTML = '';
+            void scrollEl.offsetHeight; // 强制重绘
+            scrollEl.innerHTML = currentHTML;
+            
+            console.log("Bulletin force-reloaded.");
         }
-    }, 800);
+    }, 500); 
 }
 
 // 5. 挂载启动
