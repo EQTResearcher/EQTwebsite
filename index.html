@@ -141,26 +141,29 @@
         </div>
     
         <style>
-            /* 优化后的动画：使用 translateX 性能更好且更稳定 */
+            /* 修改动画逻辑：让它从容器右侧(100%)开始移动到左侧(-100%) */
             @keyframes marquee {
-                0% { transform: translateX(0); }
+                0% { transform: translateX(100vw); } /* 100vw 代表屏幕宽度 */
                 100% { transform: translateX(-100%); }
             }
             
-            /* 鼠标悬停暂停 */
-            #live-bulletin-bar:hover .scrolling-text { 
-                animation-play-state: paused !important; 
-            }
-    
-            /* 修正图标显示不全：给链接内的图标强制增加间距 */
-            .scrolling-text a i {
-                margin-right: 8px;
+            /* 解决平板显示不全：去掉容器的 padding-left */
+            .scrolling-text {
                 display: inline-block;
+                padding-left: 0 !important; /* 去掉这里的 100% */
+                line-height: 45px;
+                animation: marquee 40s linear infinite; /* 调整了速度 */
                 vertical-align: middle;
+                will-change: transform; /* 告诉浏览器这是一个高性能动画 */
             }
-    
-            .matrix-box { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-            .matrix-box:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        
+            /* 增强时间条在电脑上的可见性 */
+            #real-time-clock {
+                min-height: 30px;
+                line-height: 30px; /* 显式设置行高 */
+                display: block !important;
+                visibility: visible !important;
+            }
         </style>
     </div>
 
