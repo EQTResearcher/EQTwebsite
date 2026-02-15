@@ -140,20 +140,20 @@
         </div>
     
         <style>
-            /* 修改动画逻辑：让它从容器右侧(100%)开始移动到左侧(-100%) */
+            /* 1. 优化动画逻辑：让它从容器最右侧（100%）开始进入 */
             @keyframes marquee {
-                0% { transform: translateX(100vw); } /* 100vw 代表屏幕宽度 */
-                100% { transform: translateX(-100%); }
+                0% { transform: translateX(100vw); } /* 100vw 是指屏幕宽度，让它从屏幕外起跑 */
+                100% { transform: translateX(-100%); } /* 滚动到自身完全消失 */
             }
             
-            /* 解决平板显示不全：去掉容器的 padding-left */
+            /* 2. 修正滚动容器样式 */
             .scrolling-text {
                 display: inline-block;
-                padding-left: 0 !important; /* 去掉这里的 100% */
+                padding-left: 0 !important; /* 彻底废除 padding-left，解决平板卡顿的关键 */
                 line-height: 45px;
-                animation: marquee 40s linear infinite; /* 调整了速度 */
+                animation: marquee 50s linear infinite; /* 50秒是一个比较学术且稳健的速度 */
                 vertical-align: middle;
-                will-change: transform; /* 告诉浏览器这是一个高性能动画 */
+                will-change: transform; /* 强制开启平板的 GPU 加速 */
             }
         
             /* 增强时间条在电脑上的可见性 */
