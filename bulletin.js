@@ -78,41 +78,44 @@ function updateClock() {
 
 // 4. 强力启动机制
 function startSystem() {
-    initBulletin(); // 填入内容
+    initBulletin(); // 填充文字
     updateClock();
     setInterval(updateClock, 1000);
 
-    const bar = document.getElementById('live-bulletin-bar');
     const scrollEl = document.getElementById('js-bulletin-container');
+    
+    if (scrollEl) {
+        // 第一步：先让它正常启动（即使它会消失）
+        scrollEl.style.animation = 'marquee 50s linear infinite';
+        scrollEl.style.webkitAnimation = 'marquee 50s linear infinite';
 
-    if (bar && scrollEl) {
-        // 1. 初始时，先给它一个“非正常”的布局状态
-        bar.style.height = '44px'; 
-        scrollEl.style.opacity = '0';
-
-        // 2. 关键补丁：模拟“切 App / 缩放浏览器”的重绘冲动
-        // 我们等 1.5 秒，避开初始加载的混乱期
+        // 第二步：【核心核武器】在 2 秒后（此时已经消失了）
+        // 我们手动触发一个系统级的 resize 事件
         setTimeout(() => {
-            // A. 强制改变尺寸（哪怕只有 1px），这会触发 Safari 的 Layout 重算
-            bar.style.height = '45px'; 
+            console.log("System-level Re-layout Triggered...");
             
-            // B. 触发一次强行重绘（Reflow）
-            void bar.offsetHeight; 
+            // 1. 瞬间改变 body 的高度，产生物理位移
+            document.body.style.overflow = 'hidden';
+            document.body.style.height = '100.1%'; 
             
-            // C. 此时赋予 3D 硬件加速，并让它可见
-            scrollEl.style.webkitTransform = 'translate3d(0, 0, 0)';
-            scrollEl.style.transform = 'translate3d(0, 0, 0)';
-            scrollEl.style.opacity = '1';
+            // 2. 派发一个真实的 resize 事件，欺骗 Safari 内核
+            window.dispatchEvent(new Event('resize'));
             
-            requestAnimationFrame(() => {
-                // D. 启动动画
-                // 此时 Safari 的状态和“缩放浏览器后”一模一样：清爽且正确
-                scrollEl.style.webkitAnimation = 'marquee 50s linear infinite';
-                scrollEl.style.animation = 'marquee 50s linear infinite';
+            // 3. 0.1秒后恢复原状
+            setTimeout(() => {
+                document.body.style.height = '100%';
+                document.body.style.overflow = '';
+                // 再次派发 resize
+                window.dispatchEvent(new Event('resize'));
                 
-                console.log("Forced dynamic re-layout: Simulating browser resize/switch.");
-            });
-        }, 1500);
+                // 4. 终极一击：给滚动元素换一个全新的 ID
+                // 这会强制 Safari 彻底删掉旧的显存层，建立新的
+                scrollEl.id = 'js-bulletin-container-NEW';
+                
+                console.log("Repaint cycle forced by logic switch.");
+            }, 100);
+            
+        }, 2500); // 在它消失后的那个瞬间执行
     }
 }
 
