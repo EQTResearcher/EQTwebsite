@@ -123,6 +123,20 @@
         .failure-box { background-color: #fffdef; border: 1px dashed #e2d06d; padding: 15px; border-radius: 8px; font-size: 0.95em; }
         footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #eaecef; color: #6a737d; font-size: 0.9em; text-align: center; }
     </style>
+
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: true
+        },
+        options: {
+          enableMenu: false // 隐藏右键菜单，使页面更干净
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div id="eqt-academic-portal" style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #333; background: #fff; line-height: 1.6;">
