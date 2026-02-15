@@ -80,36 +80,40 @@ function updateClock() {
 function startSystem() {
     console.log("EQT System Initializing...");
     
-    // 1. 先加载文字内容，但不启动动画
+    // 1. 初始化公告文字
     initBulletin();
 
-    // 2. 启动时钟（电脑端关心的功能）
+    // 2. 启动时钟（已确认正常，保持不变）
     const clockTimer = setInterval(() => {
         const el = document.getElementById('real-time-clock');
         if (el) {
             updateClock();
-            setInterval(updateClock, 1000); // 开启秒更
+            setInterval(updateClock, 1000);
             clearInterval(clockTimer);
-            console.log("Clock Ready.");
         }
     }, 100);
 
-    // 3. 【核心修复】给 iPad 留出“冷静期”
-    // 在时钟稳定运行 2 秒后，再向显卡申请公告动画
+    // 3. 【全平台通用启动补丁】
+    // 延迟 1 秒启动，确保公告内容已经完全填充到 DOM 中
     setTimeout(() => {
         const scrollEl = document.getElementById('js-bulletin-container');
         if (scrollEl) {
-            // 强制触发一次重绘，清理之前的状态
+            // 强力触发重绘
             scrollEl.style.display = 'none';
             void scrollEl.offsetHeight; 
             scrollEl.style.display = 'inline-block';
             
-            // 注入类名，激活动画
-            scrollEl.classList.add('start-scrolling');
-            console.log("iPad Animation Awakened.");
+            // 直接通过 Style 注入动画，不依赖外部 Class
+            // 这种写法在 iPad Safari 上具有最高的执行权重
+            const animationStyles = "marquee 50s linear infinite";
+            scrollEl.style.animation = animationStyles;
+            scrollEl.style.webkitAnimation = animationStyles; // 针对旧版 Safari
+            
+            console.log("Animation Force Started on all devices.");
         }
-    }, 2000); // 2秒延迟，彻底避开时钟初始化的重排高峰
+    }, 1000); 
 }
+
 // 5. 挂载启动
 if (document.readyState === 'complete') {
     startSystem();
