@@ -101,3 +101,10 @@ if (document.readyState === 'complete') {
 } else {
     window.addEventListener('load', startSystem);
 }
+setTimeout(() => {
+    document.getElementById('js-bulletin-container').style.display = 'none';
+    // 强制刷新：关掉再立刻打开
+    setTimeout(() => {
+        document.getElementById('js-bulletin-container').style.display = 'inline-block';
+    }, 50);
+}, 1000);
