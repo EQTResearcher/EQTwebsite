@@ -14,7 +14,7 @@ const bulletins = [
     },
     {
         title: "[Short Essay]",
-        desc: "What Went Wrong with the 'Entity' as the Starting Point in Modern Physics? — Full text on PhilPapers",
+        desc: "2026-02-19: The True Philosophical Contributions of This Book (GOCD)",
         link: "https://philpeople.org/profiles/kaisheng-li/news"
     },
     {
