@@ -18,24 +18,24 @@ const bulletins = [
         link: "https://philpeople.org/profiles/kaisheng-li/news"
     },
     {
-        title: "[New Book]",
-        desc: "Generative Ontology & Closure Dynamics (GOCD) — Preview on waterstones",
-        link: "https://www.waterstones.com/book/generative-ontology-and-closure-dynamics-gocd/longji-li/kaisheng-li/9798244416459"
+        title: "[New Preprint]",
+        desc: "Minimal Conditions for a Pre-Physical Generative Theory",
+        link: "https://philpapers.org/rec/KAIMCF"
     },
     {
-        title: "[New Book]",
-        desc: "Planck's Unfinished Radiance: The Energy Quantum Theory and the Mass-Energy Unity Across Micro and Macro Scales — Preview on LEANPUB",
-        link: "https://leanpub.com/plancksunfinishedradiance"
+        title: "[New Preprint]",
+        desc: "The Passage Problem and Genuine Settlement in Pre-Physical Generative Theory",
+        link: "https://philpapers.org/rec/KAITPP-4"
     },
     {
-        title: "[New Book]",
-        desc: "The Century Dilemma — Preview on Blackwell's",
-        link: "https://blackwells.co.uk/bookshop/product/The-Century-Dilemma-by-Longji-Li-Kaisheng-Li/9798243236096"
+        title: "[New Preprint]",
+        desc: "Functional Irreducibility and Minimal Layering in Pre-Physical Generative Theory",
+        link: "https://philpapers.org/rec/KAIFIA-2"
     },
     {
-        title: "[New Book]",
-        desc: "Narrowband Prisoners — Preview on amazon",
-        link: "https://www.amazon.com/Narrowband-Prisoners-Mishear-Symphony-Universe/dp/B0GD6TR37G"
+        title: "[New Preprint]",
+        desc: "Probability as Readout Residue, Not Ontology: Reclassifying Probability Within a Three-Layer Generative Architecture",
+        link: "https://philpapers.org/rec/KAIPAR-5"
     },
     {
         title: "[GitHub Sync]",
