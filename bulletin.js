@@ -7,14 +7,14 @@
 const bulletins = [
     {
         title: "", 
-        desc: "Happy Chinese New Year! Wishing you a brilliant Year of the Horse in 2026. 🏮",
+        desc: "Spring is here! Wishing you a season full of vitality and beauty. 🌸",
         link: "#",
         isSpecial: true,
         icon: "fas fa-lantern"
     },
     {
         title: "[Short Essay]",
-        desc: "2026-02-19: The True Philosophical Contributions of This Book (GOCD)",
+        desc: "2026-03-25: Top 1% Downloads (6 past months)",
         link: "https://philpeople.org/profiles/kaisheng-li/news"
     },
     {
