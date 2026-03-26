@@ -10,7 +10,7 @@ const bulletins = [
         desc: "Spring is here! Wishing you a season full of vitality and beauty. 🌸",
         link: "#",
         isSpecial: true,
-        icon: "fas fa-lantern"
+        icon: "fas fa-leaf"
     },
     {
         title: "[Short Essay]",
@@ -50,7 +50,7 @@ function initBulletin() {
     if (!container) return;
 
     container.innerHTML = bulletins.map(item => {
-        const color = item.isSpecial ? "#d73a49" : "#003366";
+        const color = item.isSpecial ? "#2e7d32" : "#003366";
         const fontWeight = item.isSpecial ? "bold" : "500";
         const iconHtml = item.icon ? `<i class="${item.icon}"></i> ` : "";
         const titleHtml = item.title ? `<strong>${item.title}</strong> ` : "";
