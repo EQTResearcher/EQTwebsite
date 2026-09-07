@@ -7,10 +7,11 @@
 const bulletins = [
     {
         title: "", 
-        desc: "Spring is here! Wishing you a season full of vitality and beauty. 🌸",
+        desc: "Autumn is here! Wishing you a fruitful season full of beauty. 🍁",
         link: "#",
         isSpecial: true,
-        icon: "fas fa-leaf"
+        icon: "fas fa-leaf",
+        style: "color: orange;"
     },
     {
         title: "[Short Essay]",
