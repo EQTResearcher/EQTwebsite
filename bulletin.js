@@ -19,19 +19,19 @@ const bulletins = [
         link: "https://philpeople.org/profiles/kaisheng-li/news"
     },
     {
-        title: "[New Preprint]",
-        desc: "Minimal Conditions for a Pre-Physical Generative Theory",
-        link: "https://philpapers.org/rec/KAIMCF"
+        title: "[New book]",
+        desc: "Constrained Speculation : A Natural Philosophy of Energy Quantum Theory",
+        link: "https://www.booksamillion.com/p/Constrained-Speculation/Kaisheng-Li/9798996139484"
     },
     {
-        title: "[New Preprint]",
-        desc: "The Passage Problem and Genuine Settlement in Pre-Physical Generative Theory",
-        link: "https://philpapers.org/rec/KAITPP-4"
+        title: "[Revised edition]",
+        desc: "Generative Ontology and Closure Dynamics : A Background-Free Event Theory",
+        link: "https://www.booksamillion.com/p/Generative-Ontology-Closure-Dynamics/Kaisheng-Li/9798996139491"
     },
     {
-        title: "[New Preprint]",
-        desc: "Functional Irreducibility and Minimal Layering in Pre-Physical Generative Theory",
-        link: "https://philpapers.org/rec/KAIFIA-2"
+        title: "[Revised edition]",
+        desc: "Mind-Matter Unity : Consciousness and Subjectivity in EQT Process Philosophy of Nature",
+        link: "https://www.booksamillion.com/p/Mind-Matter-Unity/Kaisheng-Li/9798996139477"
     },
     {
         title: "[Launch a Substack]",
