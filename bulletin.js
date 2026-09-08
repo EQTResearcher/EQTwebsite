@@ -15,7 +15,7 @@ const bulletins = [
     },
     {
         title: "[Short Essay]",
-        desc: "2026-03-25: Top 1% Downloads (6 past months)",
+        desc: "2026-09-08: Top 1% Downloads (6 past months)",
         link: "https://philpeople.org/profiles/kaisheng-li/news"
     },
     {
