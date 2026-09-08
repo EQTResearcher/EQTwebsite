@@ -11,7 +11,7 @@ const bulletins = [
         link: "#",
         isSpecial: true,
         icon: "fas fa-leaf",
-        style: "color: orange;"
+        style: "#e65100" // 👈 显式指定橙色（或 "orange"）
     },
     {
         title: "[Short Essay]",
