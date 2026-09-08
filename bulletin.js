@@ -34,9 +34,9 @@ const bulletins = [
         link: "https://philpapers.org/rec/KAIFIA-2"
     },
     {
-        title: "[New Preprint]",
-        desc: "Probability as Readout Residue, Not Ontology: Reclassifying Probability Within a Three-Layer Generative Architecture",
-        link: "https://philpapers.org/rec/KAIPAR-5"
+        title: "[Launch a Substack]",
+        desc: "What Modern Physics Forgot: From Phase Closure to Generative Ontology",
+        link: "https://gradientphysics.substack.com/"
     },
     {
         title: "[GitHub Sync]",
