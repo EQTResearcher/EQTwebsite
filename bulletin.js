@@ -10,8 +10,8 @@ const bulletins = [
         desc: "Autumn is here! Wishing you a fruitful season full of beauty. 🍁",
         link: "#",
         isSpecial: true,
-        icon: "fas fa-leaf",
-        style: "#e65100" // 👈 显式指定橙色（或 "orange"）
+        icon: "fas fa-leaf"
+        //style: "#e65100" // 👈 显式指定橙色（或 "orange"）
     },
     {
         title: "[Short Essay]",
@@ -51,7 +51,7 @@ function initBulletin() {
     if (!container) return;
 
     container.innerHTML = bulletins.map(item => {
-        const color = item.isSpecial ? "#2e7d32" : "#003366";
+        const color = item.isSpecial ? "#e65100" : "#003366";//修改四季显示的颜色 #e65100 橙色
         const fontWeight = item.isSpecial ? "bold" : "500";
         const iconHtml = item.icon ? `<i class="${item.icon}"></i> ` : "";
         const titleHtml = item.title ? `<strong>${item.title}</strong> ` : "";
