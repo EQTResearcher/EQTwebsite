@@ -15,8 +15,8 @@ const bulletins = [
     },
     {
         title: "[Short Essay]",
-        desc: "2026-09-08: Top 1% Downloads (6 past months)",
-        link: "https://philpeople.org/profiles/kaisheng-li/news"
+        desc: "2026-09-11: An Open Invitation to Mathematical Modeling",
+        link: "https://gradientphysics.substack.com/p/an-open-invitation-to-mathematical"
     },
     {
         title: "[New book]",
