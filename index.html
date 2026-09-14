@@ -228,14 +228,15 @@
                 We invite computational physicists, mathematicians, and theoretical researchers to join us in formalizing and numerically modeling the explicit derivation of <strong>Born’s Rule</strong> directly from frequency-phase dynamics, wave amplitude superposition, and energy quanta discretization without assuming fundamental probabilistic postulates.
             </p>
 
-            <!-- 响应与联系按钮区域 -->
+            <!-- 按钮区域 -->
             <div style="margin-top: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                <a href="mailto:secret@gradientphysics.org?subject=Collaboration%20Query:%20Mathematical%20Modeling%20of%20Born's%20Rule" 
-                   style="display: inline-flex; align-items: center; gap: 8px; background: #0366d6; color: #ffffff; padding: 10px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.95em; transition: background 0.2s;">
+                <!-- 触发弹窗的按钮 -->
+                <button onclick="document.getElementById('collabModal').showModal()" 
+                        style="display: inline-flex; align-items: center; gap: 8px; background: #0366d6; color: #ffffff; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; font-size: 0.95em; cursor: pointer; transition: background 0.2s;">
                     <i class="fas fa-paper-plane"></i> Submit Collaboration Interest
-                </a>
+                </button>
                 
-                <a href="https://gradientphysics.substack.com" target="_blank" 
+                <a href="https://gradientphysics.substack.com/p/an-open-invitation-to-mathematical" target="_blank" 
                    style="display: inline-flex; align-items: center; gap: 8px; background: #f6f8fa; color: #24292e; border: 1px solid #d1d5da; padding: 10px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.95em;">
                     <i class="fas fa-newspaper"></i> Read Background on Substack
                 </a>
@@ -244,6 +245,55 @@
 
     </div>
 </section>
+
+<!-- Email 收集弹窗（Modal） -->
+<dialog id="collabModal" style="padding: 25px; border: 1px solid #d1d5da; border-radius: 8px; max-width: 480px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="margin: 0; font-size: 1.2em; color: #1a1a1a; border: none; padding: 0;">Submit Collaboration Interest</h3>
+        <button onclick="document.getElementById('collabModal').close()" style="background: none; border: none; font-size: 1.2em; cursor: pointer; color: #6a737d;">&times;</button>
+    </div>
+    
+    <p style="font-size: 0.9em; color: #586069; margin-bottom: 20px; line-height: 1.5;">
+        Please enter your email address and research affiliation. We will reach out to send the technical documentation and modeling parameters.
+    </p>
+
+    <form id="collabForm" onsubmit="handleFormSubmit(event)" style="display: flex; flex-direction: column; gap: 15px;">
+        <div>
+            <label style="display: block; font-size: 0.85em; font-weight: bold; margin-bottom: 5px; color: #24292e;">Your Email Address <span style="color: #d73a49;">*</span></label>
+            <input type="email" id="userEmail" required placeholder="name@institution.edu" style="width: 100%; padding: 10px; border: 1px solid #d1d5da; border-radius: 6px; box-sizing: border-box; font-size: 0.95em;">
+        </div>
+
+        <div>
+            <label style="display: block; font-size: 0.85em; font-weight: bold; margin-bottom: 5px; color: #24292e;">Name & Institution / Affiliation (Optional)</label>
+            <input type="text" id="userAffil" placeholder="e.g. Dr. Jane Doe, Department of Physics" style="width: 100%; padding: 10px; border: 1px solid #d1d5da; border-radius: 6px; box-sizing: border-box; font-size: 0.95em;">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+            <button type="button" onclick="document.getElementById('collabModal').close()" style="padding: 8px 16px; background: #f6f8fa; border: 1px solid #d1d5da; border-radius: 6px; cursor: pointer; font-size: 0.9em;">Cancel</button>
+            <button type="submit" style="padding: 8px 16px; background: #0366d6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9em;">Submit & Send Email</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- 处理提交逻辑的 JS 脚本 -->
+<script>
+function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('userEmail').value;
+    const affil = document.getElementById('userAffil').value;
+    
+    // 构建邮件主题与正文
+    const subject = encodeURIComponent("Collaboration Interest: Born's Rule Mathematical Modeling");
+    const body = encodeURIComponent(`Hello Kaisheng & Longji,\n\nI am interested in collaborating on the Born's Rule mathematical modeling initiative.\n\nMy Email: ${email}\nName/Affiliation: ${affil || 'Not specified'}\n\nLooking forward to receiving the research materials.`);
+    
+    // 打开访问者本地的邮件客户端并自动填好收件人与正文
+    window.location.href = `mailto:secret@gradientphysics.org?subject=${subject}&body=${body}`;
+    
+    // 关闭弹窗
+    document.getElementById('collabModal').close();
+}
+</script>
 
 <!-- Gradient Physics - Substack Feed Component (English Version) -->
 <style>
