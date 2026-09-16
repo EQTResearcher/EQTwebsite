@@ -1,0 +1,13 @@
+# Robots.txt for Gradient Physics Research (https://gradientphysics.org)
+User-agent: *
+Allow: /
+
+# 允许各大搜索引擎抓取所有媒体和图片资源
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+# 如果你生成了站点地图，请将下方地址取消注释并替换为你的实际 Sitemap 链接
+# Sitemap: https://gradientphysics.org/sitemap.xml
